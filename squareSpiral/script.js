@@ -1,5 +1,6 @@
 let alpha = 5;
 let deltaAlpha = alpha;
+let checkAlpha = false
 let side = Math.min(window.innerWidth, window.innerHeight);
   
 
@@ -24,7 +25,7 @@ function setup() {
 
 function draw() {
   
-  if(frameCount % 1 === 0) {
+  if(frameCount % 2 === 0) {
     
   
     translate(width/2, height/2);
@@ -45,8 +46,14 @@ function draw() {
     if(alpha > 360) {
       deltaAlpha--;
       delta = deltaAlpha
+
+      checkAlpha = true;
     }
     
+  }
+
+  if(checkAlpha && alpha === -200) {
+    location.href = "https://ludovicoradaelli.github.io/Matematica/rectanglePacking/index.html"
   }
   
   
