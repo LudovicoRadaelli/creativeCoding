@@ -15,6 +15,14 @@ var stars = [];
 var colors = ['#ffffff', '#fff15c', '#ffe800', '#f3f1e2'];
 var starsNumber = 25;
 
+//VARIABILI TERZA ANIMAZIONE
+let inizio = 0;
+let vel = 0.09;
+let maxDimen = 12;
+let numRighe = 70;
+let numColonne = 20;
+let numGiri = 2;
+
 
 function setup() {
     cnv = createCanvas(w, h);
@@ -130,13 +138,13 @@ function setup() {
             rotate((frameCount-57)*3);
             stroke(lerpColor(color('#ea0043'), color('#0fefca'), ((frameCount-57)%120)/120));
             
-            ellipse(100,0,200,200);
+            ellipse(100,0,150,150);
         }
 
         pop()
     }
 
-    if(frameCount >= 230 && frameCount <= 350) {
+    if(frameCount >= 230 && frameCount <= 300) {
 
         push();
 
@@ -146,8 +154,8 @@ function setup() {
         fill(20);
         rect(width - 6*(frameCount- 230), 0, 6*(frameCount- 230), height) */
 
-        strokeWeight(15);
-        stroke(20);
+        strokeWeight(random(15, 30));
+        stroke(random(30));
         let rnd = random(width)
         line(rnd, 0, rnd, height)
 
@@ -155,14 +163,14 @@ function setup() {
         
     }
 
-    if(frameCount === 350) {
+    if(frameCount === 300) {
 
         background(20);
 
     }
 
     //STELLE
-    if(frameCount >= 351 && frameCount <= 1000) {
+    if(frameCount >= 300 && frameCount <= 850) {
 
         push();
 
@@ -174,7 +182,8 @@ function setup() {
         textSize(20);
         textFont('helvetica');
         textAlign(CENTER)
-        text('Clicca lo schermo', windowWidth/2-200, height/2);
+        text('Clicca lo schermo', windowWidth/2, height/2);
+
         
         for (var b = 0; b < stars.length; b++) {
             stars[b].move();
@@ -182,19 +191,97 @@ function setup() {
             stars[b].color = color(random(colors));
         }
         
-        if (frameCount > 351+ 800) {
+        if (frameCount > 700) {
             starsNumber = 0;
         }
-          
-
-
+        
         pop();
 
     }
 
+    if(frameCount >= 850 && frameCount <= 940) {
+
+        push();
+
+        strokeWeight(random(15, 30));
+        stroke(random(30));
+        let rnd = random(height)
+        line(0, rnd, width, rnd)
+
+        pop();
+        
+    }
+
+    if(frameCount === 940) {
+        frameRate(24);
+        console.log(`inizio: ${inizio}`)
+    }
+
+    if(frameCount >= 940 && frameCount <= 1050) {
+        push();
+
+        angleMode(RADIANS)
+        noStroke();
+        
+        inizio = (920 -frameCount) * vel;
 
         
+        background('black');
+        
+        for(var giri = 0; giri < numGiri; giri += 1) {
+            var giriInizio = inizio + map(giri, 0, numGiri, 0, TWO_PI);
+        
+            for(var col = 0; col < numColonne; col += 1) {
+                var colOffset = map(col, 0, numColonne, 0, TWO_PI);
+                var x = map(col, 0, numColonne, 50, width - 50);
+            
+                for(var rig = 0; rig < numRighe; rig += 10) {
+                    var y = 90 + rig * 10 + sin(giriInizio + colOffset) * 50;
+                    var dimOffset = (cos(giriInizio - (rig / numRighe) + colOffset) + 1.1) * 0.5;
+                    var dimen = dimOffset * maxDimen;
+                
+                    var colorList = ['CornflowerBlue', 'DarkOrchid', 'DarkSeaGreen', 'DeepPink'];
+                    var index = Math.round(random() * (colorList.length - 1));
+                    fill(color(colorList[index]));
+                    ellipse(x, y, dimen, dimen);
+                
+                }
+            }
+        }
+
+    }
+
+    if(frameCount >= 1050 && frameCount <= 1140) {
+
+        push();
+        frameRate(50);
+
+        strokeWeight(random(15, 50));
+        stroke(random(50));
+        let rnd = random(height)
+        line(0, rnd, width, rnd - 150)
+
+        pop();
+        
+    }
+
+    if(frameCount >= 1140) {
+        push();
+
+        background(20);
+        stroke(`rgba(255,255,255, 255 - (1140 - ${frameCount})/(1240*5))`);
+        fill(`rgba(255,255,255, 255 -(1140 - ${frameCount})/(1240*5))`);
+        textAlign(CENTER);
+        text("Vi aspetto!",width/2,height/2)
+
+        pop();
+    }
+        
 }
+
+
+
+
 
 
 function Star (_x, _y,) {
@@ -217,7 +304,7 @@ function Star (_x, _y,) {
       if (this.x > width || this.x < 0) {
         xInc = xInc * -1;
       }
-      if (frameCount > 800) {
+      if (frameCount > 700) {
         xInc = xInc * 0;
         yInc = yInc * 0;
         this.x = this.x + random(-0.25, 0.25);
@@ -250,13 +337,14 @@ function writeWord(k) {
     
 function mouseClicked() {
 
-    if(frameCount >= 351 && frameCount <= 1000) {
+    if(frameCount >= 351 && frameCount <= 800) {
         for (var a = 0; a < starsNumber; a++) {
             var myStar = new Star(mouseX, mouseY, 10);
             myStar.speed1 = random(-5, 5);
             myStar.speed2 = random(-5, 5);
             myStar.color = color(random(colors));
             stars.push(myStar);
-          }
+        }
+        console.log(frameCount)
     }
 }
